@@ -1,9 +1,9 @@
-Feature: something something
-  In order to something something
-  A user something something
-  something something something
+Feature: fetching the tweets
+  In order to schedule tweets
+  As a twitter bot
+  I want to fetch all tweets sended at me 
 
-  Scenario: something something
-    Given inspiration
-    When I create a sweet new gem
-    Then everyone should see how awesome I am
+  Scenario: A user send a tweet to the bot
+    Given the user "fake_user_001" sended a tweet like "@bot herp derp something"
+    When the bot checks for new tweets
+    Then the tweet "@bot herp derp something" must be added in a queue for processing
