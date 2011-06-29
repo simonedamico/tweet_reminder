@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "tweet_reminder"
   gem.homepage = "http://github.com/neku/tweet_reminder"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = "A twitter bot that remind you a schedule event"
+  gem.description = "A gem for setup a Twitter bot that acts like a cron reminding you scheduled events"
   gem.email = "sim@me.com"
   gem.authors = ["Simone D'Amico"]
   # dependencies defined in Gemfile
