@@ -1,6 +1,6 @@
 = tweet_reminder
 
-Description goes here.
+Twitter reminder is a twitter bot for schedule tweet in the future for the porpouse of reminding activities.
 
 == Contributing to tweet_reminder
  
