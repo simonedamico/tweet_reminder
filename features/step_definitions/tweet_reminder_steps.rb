@@ -1,3 +1,17 @@
+class Output
+  def messages
+    @messages ||= []
+  end
+  
+  def puts(message)
+    messages << message
+  end
+end
+
+def output
+  @output ||= Output.new
+end
+
 def twitter_conf_filled_in?(configuration)
   File.open(configuration) do |file|
     file.each do |line|
@@ -25,8 +39,21 @@ Given /^the twitter yaml configuration is not filled\-in$/ do
   twitter_conf_filled_in?('conf/bot.yaml.default').should_not be_true
 end
 
-
 When /^the sys\-admin starts the server$/ do
-  pending # express the regexp above with the code you wish you had
+  @server = TweetReminder::Bot.new(output)
+  @server.start
 end
+
+Then /^the server should start without any error and display "([^"]*)"$/ do |message|
+  output.messages.should include(message)
+end
+
+Then /^the server should shut\-down warning: "([^"]*)"$/ do |message|
+  output.messages.should include(message)
+end
+
+Given /^the network is unreacheable$/ do
+  pending "find out a way to disable network"
+end
+
 
