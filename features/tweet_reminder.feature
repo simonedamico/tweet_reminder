@@ -16,7 +16,7 @@ Feature: Run tweet-reminder server program
     Then the server should shut-down warning about the twitter configuration
     
   Scenario: The server cannot start beacause a lack of connectivity
-    Given the tweet-reminder gem in installed correctly
+    Given the tweet-reminder gem is installed correctly
     And the network is unreacheable
     When the sys-admin starts the server
     Then the server should shout-down warning about lack of connectivity
