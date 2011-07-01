@@ -11,8 +11,8 @@ module TweetReminder
       @interrupted = false
       trap("INT") { @interrupted = true }
       
-      @last_direct_id = 0
-      @last_mention_id = 0
+      @last_direct_id = 1
+      @last_mention_id = 1
       
     end
     
@@ -59,7 +59,7 @@ module TweetReminder
     end
     
     def fetch_mention_tweets
-      Twitter.mentions.reverse.each do |tweet|
+      Twitter.mentions({since_id: @last_mention_id}).reverse.each do |tweet|
           if tweet.id > @last_mention_id
             save_tweet(tweet)
             @last_mention_id = tweet.id
