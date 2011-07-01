@@ -21,13 +21,9 @@ module TweetReminder
       setup_twitter
       loop do
         fetch_direct_tweets
-        fetch_mention_tweets
-        
-        puts fetched_tweets
-        
+        fetch_mention_tweets        
         process_tweets
         
-        puts "altro giro!"
         exit if @interrupted
       end
     end
