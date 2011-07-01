@@ -10,14 +10,24 @@ module TweetReminder
       @output = output
       @interrupted = false
       trap("INT") { @interrupted = true }
+      
+      @last_direct_id = 0
+      @last_mention_id = 0
+      
     end
     
     def start
       load_conf
       setup_twitter
       loop do
-        fetch_tweets
+        fetch_direct_tweets
+        fetch_mention_tweets
         
+        puts fetched_tweets
+        
+        process_tweets
+        
+        puts "altro giro!"
         exit if @interrupted
       end
     end
@@ -37,8 +47,40 @@ module TweetReminder
       end
     end
     
-    def fetch_tweets
-      
+    def process_tweets
+      while(tweet = @fetched_tweets.shift)
+        puts tweet[:text]
+      end
     end
+    
+    def fetch_direct_tweets
+      Twitter.direct_messages({since_id: @last_direct_id}).reverse.each do |tweet|
+          if tweet.id > @last_direct_id
+            save_tweet(tweet)
+            @last_direct_id = tweet.id
+          end
+      end
+    end
+    
+    def fetch_mention_tweets
+      Twitter.mentions.reverse.each do |tweet|
+          if tweet.id > @last_mention_id
+            save_tweet(tweet)
+            @last_mention_id = tweet.id
+          end
+      end
+    end
+    
+    def fetched_tweets
+      @fetched_tweets ||= []
+    end
+    
+    def save_tweet(tweet)
+      fetched_tweets << { sender: tweet.sender_screen_name,
+                          text: tweet.text,
+                          id: tweet.id,
+                          date: tweet.created_at }
+    end
+    
   end
 end
