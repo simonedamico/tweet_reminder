@@ -1,6 +1,7 @@
 require 'yaml'
 require 'twitter'
 require 'tweet_reminder/tweet_fetcher'
+require 'tweet_reminder/tweet_sender'
 
 module TweetReminder
   class Bot
@@ -13,6 +14,8 @@ module TweetReminder
       trap("INT") { @interrupted = true }
       @fetched_tweets = []
       @tweet_fetcher = TweetReminder::TweetFetcher.new(Twitter, @fetched_tweets)
+      @outgoing_tweets = []
+      @tweet_sender = TweetReminder::TweetSender.new(Twitter, @outgoing_tweets)
     end
     
     def start
@@ -21,7 +24,8 @@ module TweetReminder
       loop do
         fetch_tweets    
         process_tweets
-
+        send_tweets
+        
         exit if @interrupted
       end
     end
@@ -47,8 +51,15 @@ module TweetReminder
     
     def process_tweets
       while(tweet = @fetched_tweets.shift)
-        puts tweet[:text]
+        tweet[:text].gsub!(/@mementme/i, 'Hey, you told me:')
+        @outgoing_tweets << tweet
+        puts tweet
       end
     end
+    
+    def send_tweets
+      @tweet_sender.send_tweets      
+    end
+    
   end  
 end

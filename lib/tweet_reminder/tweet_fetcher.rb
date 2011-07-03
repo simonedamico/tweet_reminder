@@ -32,7 +32,8 @@ module TweetReminder
     end
     
     def save_tweet(tweet)
-      @fetched_tweets << { sender: tweet.sender_screen_name,
+      #tweet.send_screen_name for direct tweets, so if is nil I assume is a mention
+      @fetched_tweets << { sender: (tweet.sender_screen_name or tweet.user.screen_name),
                           text: tweet.text,
                           id: tweet.id,
                           date: tweet.created_at }
